@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { type NextApiRequest } from "next/types";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/lib/models/Blog";
 
-type RouteSegmentProps = {
-  params: { slug: string };
-};
-
 export async function GET(
   _request: NextRequest,
-  { params }: RouteSegmentProps
-) {
+  { params }: { params: { slug: string } }
+): Promise<NextResponse> {
   try {
     await dbConnect();
     const blog = await Blog.findOne({ slug: params.slug }).lean();
@@ -32,7 +27,10 @@ export async function GET(
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteSegmentProps) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+): Promise<NextResponse> {
   try {
     await dbConnect();
     const body = await request.json();
@@ -61,8 +59,8 @@ export async function PUT(request: NextRequest, { params }: RouteSegmentProps) {
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: RouteSegmentProps
-) {
+  { params }: { params: { slug: string } }
+): Promise<NextResponse> {
   try {
     await dbConnect();
     const deletedBlog = await Blog.findOneAndDelete({
