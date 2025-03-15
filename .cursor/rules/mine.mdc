@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+# dont use NextAuth in this project
+
+- You can @ files here
+- You can use markdown but dont have to
