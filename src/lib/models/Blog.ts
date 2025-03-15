@@ -4,20 +4,22 @@ const BlogSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Title is required"],
+      trim: true,
     },
     slug: {
       type: String,
-      required: true,
+      required: [true, "Slug is required"],
       unique: true,
+      trim: true,
     },
     content: {
       type: String,
-      required: true,
+      required: [true, "Content is required"],
     },
     excerpt: {
       type: String,
-      required: true,
+      required: [true, "Excerpt is required"],
     },
     coverImage: {
       type: String,
@@ -25,7 +27,7 @@ const BlogSchema = new mongoose.Schema(
     },
     author: {
       type: String,
-      required: true,
+      required: [true, "Author is required"],
     },
     tags: {
       type: [String],
