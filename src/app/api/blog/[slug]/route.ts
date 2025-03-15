@@ -3,14 +3,14 @@ import { type NextApiRequest } from "next/types";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/lib/models/Blog";
 
-interface RouteParams {
-  params: {
-    slug: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+type RouteSegmentProps = {
+  params: { slug: string };
+};
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  _request: NextRequest,
+  { params }: RouteSegmentProps
+) {
   try {
     await dbConnect();
     const blog = await Blog.findOne({ slug: params.slug }).lean();
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: RouteSegmentProps) {
   try {
     await dbConnect();
     const body = await request.json();
@@ -59,7 +59,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  _request: NextRequest,
+  { params }: RouteSegmentProps
+) {
   try {
     await dbConnect();
     const deletedBlog = await Blog.findOneAndDelete({
