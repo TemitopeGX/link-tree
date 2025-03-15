@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import * as Fa from "react-icons/fa";
-import * as Si from "react-icons/si";
 
 export default function NavBar() {
   const pathname = usePathname();

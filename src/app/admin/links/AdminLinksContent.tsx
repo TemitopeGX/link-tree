@@ -255,9 +255,6 @@ export default function AdminLinksContent() {
     setEditingId(link._id);
   };
 
-  const IconComponent =
-    iconComponents[formData.icon as keyof typeof iconComponents] || Fa.FaLink;
-
   return (
     <main className="min-h-screen bg-black overflow-hidden">
       {/* Animated background */}

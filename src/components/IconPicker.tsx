@@ -5,11 +5,12 @@ import * as Fa from "react-icons/fa";
 import * as Si from "react-icons/si";
 import * as Bs from "react-icons/bs";
 import "@/app/globals.css";
+import { IconType } from "react-icons";
 
 interface IconPickerProps {
-  onSelect: (iconName: string) => void;
+  onSelect: (icon: IconType) => void;
   iconComponents: Record<string, any>;
-  selectedIcon?: string;
+  selectedIcon?: IconType;
 }
 
 export default function IconPicker({
@@ -68,7 +69,9 @@ export default function IconPicker({
     name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const SelectedIcon = selectedIcon ? iconComponents[selectedIcon] : null;
+  const SelectedIcon = selectedIcon
+    ? iconComponents[selectedIcon.toString()]
+    : null;
 
   return (
     <div className="relative" ref={pickerRef}>
@@ -79,7 +82,7 @@ export default function IconPicker({
         {SelectedIcon ? (
           <>
             <SelectedIcon className="w-5 h-5" />
-            <span>{selectedIcon}</span>
+            <span>{selectedIcon?.toString()}</span>
           </>
         ) : (
           "Select an icon"
@@ -110,11 +113,11 @@ export default function IconPicker({
                 <button
                   key={name}
                   onClick={() => {
-                    onSelect(name);
+                    onSelect(Icon as IconType);
                     setIsOpen(false);
                   }}
                   className={`p-3 rounded-lg hover:bg-[#39ff13]/10 flex items-center justify-center transition-colors ${
-                    selectedIcon === name ? "bg-[#39ff13]/20" : ""
+                    selectedIcon?.toString() === name ? "bg-[#39ff13]/20" : ""
                   }`}
                 >
                   <Icon className="w-5 h-5 text-white/80" />
