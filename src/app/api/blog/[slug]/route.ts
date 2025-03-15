@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/lib/models/Blog";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+type Props = {
+  params: {
+    slug: string;
+  };
+};
+
+export async function GET(request: NextRequest, context: Props) {
   try {
     await dbConnect();
-    const blog = await Blog.findOne({ slug: params.slug }).lean();
+    const blog = await Blog.findOne({ slug: context.params.slug }).lean();
 
     if (!blog) {
       return NextResponse.json(
@@ -27,15 +30,12 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function PUT(request: NextRequest, context: Props) {
   try {
     await dbConnect();
     const body = await request.json();
     const updatedBlog = await Blog.findOneAndUpdate(
-      { slug: params.slug },
+      { slug: context.params.slug },
       body,
       { new: true }
     ).lean();
@@ -57,14 +57,11 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function DELETE(request: NextRequest, context: Props) {
   try {
     await dbConnect();
     const deletedBlog = await Blog.findOneAndDelete({
-      slug: params.slug,
+      slug: context.params.slug,
     }).lean();
 
     if (!deletedBlog) {
