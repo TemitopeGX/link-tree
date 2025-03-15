@@ -1,27 +1,84 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/lib/models/Blog";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
     await dbConnect();
-    const post = await Blog.findOne({ slug: params.slug }).lean();
+    const blog = await Blog.findOne({ slug: params.slug }).lean();
 
-    if (!post) {
+    if (!blog) {
       return NextResponse.json(
         { error: "Blog post not found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(post);
+    return NextResponse.json(blog);
   } catch (error) {
-    console.error("Failed to fetch blog post:", error);
+    console.error("Error fetching blog post:", error);
     return NextResponse.json(
-      { error: "Failed to fetch blog post" },
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    await dbConnect();
+    const body = await request.json();
+    const updatedBlog = await Blog.findOneAndUpdate(
+      { slug: params.slug },
+      body,
+      { new: true }
+    ).lean();
+
+    if (!updatedBlog) {
+      return NextResponse.json(
+        { error: "Blog post not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(updatedBlog);
+  } catch (error) {
+    console.error("Error updating blog post:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    await dbConnect();
+    const deletedBlog = await Blog.findOneAndDelete({
+      slug: params.slug,
+    }).lean();
+
+    if (!deletedBlog) {
+      return NextResponse.json(
+        { error: "Blog post not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Blog post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting blog post:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
