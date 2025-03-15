@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { type NextApiRequest } from "next/types";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/lib/models/Blog";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { slug: string } }
-) {
+interface RouteParams {
+  params: {
+    slug: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     await dbConnect();
-    const blog = await Blog.findOne({ slug: context.params.slug }).lean();
+    const blog = await Blog.findOne({ slug: params.slug }).lean();
 
     if (!blog) {
       return NextResponse.json(
@@ -27,15 +32,12 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: { params: { slug: string } }
-) {
+export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     await dbConnect();
     const body = await request.json();
     const updatedBlog = await Blog.findOneAndUpdate(
-      { slug: context.params.slug },
+      { slug: params.slug },
       body,
       { new: true }
     ).lean();
@@ -57,14 +59,11 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { slug: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     await dbConnect();
     const deletedBlog = await Blog.findOneAndDelete({
-      slug: context.params.slug,
+      slug: params.slug,
     }).lean();
 
     if (!deletedBlog) {
