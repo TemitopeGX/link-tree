@@ -26,6 +26,12 @@ interface Link {
   updatedAt: string;
 }
 
+interface FormData {
+  title: string;
+  url: string;
+  icon?: string;
+}
+
 // Icon mapping object
 const iconComponents = {
   // Social Media
@@ -142,10 +148,10 @@ const iconComponents = {
 
 export default function AdminLinksContent() {
   const [links, setLinks] = useState<Link[]>([]);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     url: "",
-    icon: "FaLink",
+    icon: undefined,
   });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -186,7 +192,7 @@ export default function AdminLinksContent() {
           setFormData({
             title: "",
             url: "",
-            icon: "FaLink",
+            icon: undefined,
           });
           fetchLinks();
         } else {
@@ -219,7 +225,7 @@ export default function AdminLinksContent() {
       setFormData({
         title: "",
         url: "",
-        icon: "FaLink",
+        icon: undefined,
       });
       setEditingId(null);
       fetchLinks();
@@ -317,7 +323,7 @@ export default function AdminLinksContent() {
                       Icon
                     </label>
                     <IconPicker
-                      onSelect={(iconName) => {
+                      onSelect={(iconName: string) => {
                         setFormData({ ...formData, icon: iconName });
                       }}
                       iconComponents={iconComponents}
@@ -342,7 +348,7 @@ export default function AdminLinksContent() {
                           setFormData({
                             title: "",
                             url: "",
-                            icon: "FaLink",
+                            icon: undefined,
                           });
                         }}
                         className="px-6 py-2.5 bg-black/40 text-white font-medium rounded-xl hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black transition-colors"
