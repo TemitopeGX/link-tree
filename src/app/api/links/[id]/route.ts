@@ -1,33 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/firebase";
 import dbConnect from "@/lib/mongodb";
 import Link from "@/lib/models/Link";
 
 // Delete a link
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: any) {
   try {
     await dbConnect();
-    console.log("MongoDB connected successfully");
+    const deletedLink = await Link.findByIdAndDelete(params.id).lean();
 
-    const link = await Link.findByIdAndDelete(params.id).lean();
-
-    if (!link) {
-      console.log("Link not found:", params.id);
+    if (!deletedLink) {
       return NextResponse.json({ error: "Link not found" }, { status: 404 });
     }
 
-    console.log("Link deleted successfully:", link);
     return NextResponse.json({ message: "Link deleted successfully" });
   } catch (error) {
-    console.error("Failed to delete link:", error);
+    console.error("Error deleting link:", error);
     return NextResponse.json(
-      {
-        error: "Failed to delete link",
-        details: error instanceof Error ? error.message : String(error),
-      },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -71,37 +61,42 @@ export async function PATCH(
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, { params }: any) {
   try {
     await dbConnect();
-    console.log("MongoDB connected successfully");
+    const body = await request.json();
+    const updatedLink = await Link.findByIdAndUpdate(params.id, body, {
+      new: true,
+    }).lean();
 
-    const data = await request.json();
-    console.log("Received update data:", data);
-
-    const link = await Link.findByIdAndUpdate(
-      params.id,
-      { $set: data },
-      { new: true }
-    ).lean();
-
-    if (!link) {
-      console.log("Link not found:", params.id);
+    if (!updatedLink) {
       return NextResponse.json({ error: "Link not found" }, { status: 404 });
     }
 
-    console.log("Link updated successfully:", link);
+    return NextResponse.json(updatedLink);
+  } catch (error) {
+    console.error("Error updating link:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request: NextRequest, { params }: any) {
+  try {
+    await dbConnect();
+    const link = await Link.findById(params.id).lean();
+
+    if (!link) {
+      return NextResponse.json({ error: "Link not found" }, { status: 404 });
+    }
+
     return NextResponse.json(link);
   } catch (error) {
-    console.error("Failed to update link:", error);
+    console.error("Error fetching link:", error);
     return NextResponse.json(
-      {
-        error: "Failed to update link",
-        details: error instanceof Error ? error.message : String(error),
-      },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
