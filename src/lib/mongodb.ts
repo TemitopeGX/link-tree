@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
 declare global {
-  var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-  };
+  var mongoose: MongooseCache | undefined;
 }
 
 const MONGODB_URI = process.env.MONGODB_URI!;
@@ -15,10 +17,10 @@ if (!MONGODB_URI) {
   );
 }
 
-let cached = global.mongoose;
+let cached = global.mongoose || { conn: null, promise: null };
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+if (!global.mongoose) {
+  global.mongoose = cached;
 }
 
 async function dbConnect(): Promise<typeof mongoose> {
@@ -31,17 +33,19 @@ async function dbConnect(): Promise<typeof mongoose> {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts);
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      cached.conn = mongoose;
+      return mongoose;
+    });
   }
 
   try {
-    cached.conn = await cached.promise;
+    const mongoose = await cached.promise;
+    return mongoose;
   } catch (e) {
     cached.promise = null;
     throw e;
   }
-
-  return cached.conn;
 }
 
 export default dbConnect;
