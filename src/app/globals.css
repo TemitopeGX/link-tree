@@ -46,3 +46,102 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(57, 255, 19, 0.5);
 }
+
+/* Enhanced animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    filter: brightness(100%) blur(4px);
+  }
+  50% {
+    filter: brightness(150%) blur(6px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Perspective utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(to right, #39ff13, #00ff00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(57, 255, 19, 0.1);
+}
+
+/* Animated border */
+.animated-border {
+  position: relative;
+  background: linear-gradient(90deg, #39ff13 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.3s ease;
+}
+
+.animated-border:hover {
+  background-position: 0 0;
+}
+
+/* Neon glow */
+.neon-glow {
+  box-shadow: 0 0 5px #39ff13, 0 0 10px #39ff13, 0 0 15px #39ff13,
+    0 0 20px #39ff13;
+}
+
+/* Animated gradient background */
+.animated-gradient {
+  background: linear-gradient(
+    270deg,
+    rgba(57, 255, 19, 0.1),
+    rgba(57, 255, 19, 0.2),
+    rgba(57, 255, 19, 0.1),
+    transparent
+  );
+  background-size: 400% 100%;
+  animation: gradient 8s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import NavBar from "@/components/NavBar";
+import ParticleBackground from "@/components/ParticleBackground";
+import MouseTrail from "@/components/MouseTrail";
 import Image from "next/image";
 import * as Fa from "react-icons/fa";
 import * as Si from "react-icons/si";
@@ -89,12 +91,14 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-black overflow-hidden">
-      {/* Animated background */}
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,_#39ff1310_0%,_transparent_50%)] animate-[pulse_4s_ease-in-out_infinite]" />
-      <div className="fixed inset-0 bg-[url(/grid.svg)] bg-center opacity-30" />
+      <ParticleBackground />
+      <MouseTrail />
+
+      {/* Enhanced animated background */}
       <div className="fixed inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_600px,_#39ff1305_0%,_transparent_40%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_600px,_#39ff1305_0%,_transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_#39ff1310_0%,_transparent_50%)] animate-[pulse_4s_ease-in-out_infinite]" />
+        <div className="absolute inset-0 bg-[url(/grid.svg)] bg-center opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
       </div>
 
       <NavBar />
@@ -108,9 +112,23 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="text-center"
             >
-              <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 mx-auto mb-4 sm:mb-8">
+              {/* Enhanced profile image with floating effect */}
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 mx-auto mb-4 sm:mb-8"
+              >
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#39ff13] to-[#39ff13]/30 animate-[pulse_4s_ease-in-out_infinite] blur-xl opacity-50" />
-                <div className="relative rounded-full border-2 border-[#39ff13] overflow-hidden">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="relative rounded-full border-2 border-[#39ff13] overflow-hidden"
+                >
                   <Image
                     src="/profile.jpg"
                     alt="TemitopeGX"
@@ -119,44 +137,84 @@ export default function Home() {
                     className="object-cover"
                     priority
                   />
-                </div>
-              </div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4">
+                </motion.div>
+              </motion.div>
+
+              {/* Enhanced title with glowing effect */}
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 relative"
+              >
                 <span className="text-white">Temitope</span>
-                <span className="text-[#39ff13]">GX</span>
-              </h1>
-              <div className="bg-black/40 backdrop-blur-xl rounded-xl p-4 mb-6 border border-[#39ff13]/10">
+                <span className="text-[#39ff13] relative">
+                  GX
+                  <span className="absolute inset-0 blur-lg text-[#39ff13] opacity-50">
+                    GX
+                  </span>
+                </span>
+              </motion.h1>
+
+              {/* Enhanced bio card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                whileHover={{ scale: 1.02 }}
+                className="bg-black/40 backdrop-blur-xl rounded-xl p-4 mb-6 border border-[#39ff13]/10 relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#39ff13]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                 <p className="text-sm sm:text-base text-gray-300">
                   Hi, I'm TemitopeGX, a professional graphic designer, web
                   designer, and live event streamer.
                 </p>
-              </div>
-              <div className="flex items-center justify-center gap-3 sm:gap-4">
-                <a
-                  href="#"
-                  className="px-6 py-2.5 text-sm sm:text-base rounded-full bg-[#39ff13] text-black font-medium hover:bg-[#39ff13]/90 transition-colors"
+              </motion.div>
+
+              {/* Enhanced action buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="flex items-center justify-center gap-3 sm:gap-4"
+              >
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href="https://temitopegx1.vercel.app/contact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-2.5 text-sm sm:text-base rounded-full bg-[#39ff13] text-black font-medium hover:bg-[#39ff13]/90 transition-colors relative group"
                 >
-                  Contact Me
-                </a>
-                <a
+                  <span className="relative z-10">Contact Me</span>
+                  <div className="absolute inset-0 rounded-full bg-[#39ff13] blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   href="#"
-                  className="px-6 py-2.5 text-sm sm:text-base rounded-full bg-black/40 backdrop-blur-xl border border-[#39ff13]/20 text-white font-medium hover:bg-black/60 transition-colors"
+                  className="px-6 py-2.5 text-sm sm:text-base rounded-full bg-black/40 backdrop-blur-xl border border-[#39ff13]/20 text-white font-medium hover:bg-black/60 transition-colors relative group"
                 >
-                  Download CV
-                </a>
-              </div>
+                  <span className="relative z-10">Download CV</span>
+                  <div className="absolute inset-0 rounded-full bg-[#39ff13]/10 blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
+                </motion.a>
+              </motion.div>
             </motion.div>
           </div>
 
+          {/* Enhanced links section */}
           <div className="space-y-3 max-w-lg mx-auto px-0 sm:px-4">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-xl sm:text-2xl font-bold text-white mb-4"
+              className="text-xl sm:text-2xl font-bold text-white mb-4 relative inline-block"
             >
               Links & Resources
+              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#39ff13]/0 via-[#39ff13] to-[#39ff13]/0" />
             </motion.h2>
+
+            {/* Enhanced link cards */}
             {links.map((link, index) => {
               const IconComponent =
                 iconComponents[link.icon as keyof typeof iconComponents] ||
@@ -169,13 +227,17 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{
                     scale: 1.02,
-                    backgroundColor: "rgba(0,0,0,0.7)",
+                    rotateX: 2,
+                    rotateY: 2,
                   }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleLinkClick(link._id, link.url)}
-                  className="group relative bg-black/40 backdrop-blur-xl rounded-xl p-4 border border-[#39ff13]/10 cursor-pointer overflow-hidden"
+                  className="group relative bg-black/40 backdrop-blur-xl rounded-xl p-4 border border-[#39ff13]/10 cursor-pointer overflow-hidden transform perspective-1000"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#39ff13]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#39ff13]/0 via-[#39ff13]/5 to-[#39ff13]/0" />
+                  </div>
                   <div className="flex items-center space-x-4 relative">
                     <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#39ff13]/5 text-[#39ff13] group-hover:bg-[#39ff13]/10 transition-colors">
                       <IconComponent className="w-5 h-5" />
@@ -188,13 +250,23 @@ export default function Home() {
                         {link.url}
                       </p>
                     </div>
-                    <div className="flex-shrink-0">
-                      <motion.svg
+                    <motion.div
+                      className="flex-shrink-0"
+                      whileHover={{ x: 4 }}
+                      animate={{
+                        x: [0, 4, 0],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      <svg
                         className="w-5 h-5 text-gray-400 group-hover:text-[#39ff13] transition-colors"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
-                        whileHover={{ x: 4 }}
                       >
                         <path
                           strokeLinecap="round"
@@ -202,8 +274,8 @@ export default function Home() {
                           strokeWidth={2}
                           d="M9 5l7 7-7 7"
                         />
-                      </motion.svg>
-                    </div>
+                      </svg>
+                    </motion.div>
                   </div>
                 </motion.div>
               );

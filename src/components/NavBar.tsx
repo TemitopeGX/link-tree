@@ -151,7 +151,7 @@ export default function NavBar() {
           <div className="flex items-center gap-2">
             {!isAdminSection && (
               <Link
-                href="https://github.com/yourusername/yourrepo"
+                href="https://github.com/TemitopeGX/link-tree"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative flex items-center gap-2 px-4 py-2 rounded-xl bg-black/20 hover:bg-black/40 border border-[#39ff13]/20 hover:border-[#39ff13]/40 transition-all"
@@ -277,7 +277,7 @@ export default function NavBar() {
           <div className="flex items-center">
             {!isAdminSection && (
               <Link
-                href="https://github.com/yourusername/yourrepo"
+                href="https://github.com/TemitopeGX/link-tree"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-[#39ff13] hover:opacity-80 transition-all"
