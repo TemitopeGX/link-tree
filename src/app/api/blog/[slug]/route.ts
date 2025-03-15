@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/lib/models/Blog";
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
-
-export async function GET(request: NextRequest, context: Props) {
+export async function GET(
+  request: NextRequest,
+  context: { params: { slug: string } }
+) {
   try {
     await dbConnect();
     const blog = await Blog.findOne({ slug: context.params.slug }).lean();
@@ -30,7 +27,10 @@ export async function GET(request: NextRequest, context: Props) {
   }
 }
 
-export async function PUT(request: NextRequest, context: Props) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: { slug: string } }
+) {
   try {
     await dbConnect();
     const body = await request.json();
@@ -57,7 +57,10 @@ export async function PUT(request: NextRequest, context: Props) {
   }
 }
 
-export async function DELETE(request: NextRequest, context: Props) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { slug: string } }
+) {
   try {
     await dbConnect();
     const deletedBlog = await Blog.findOneAndDelete({
