@@ -24,38 +24,32 @@ export async function DELETE(request: NextRequest, { params }: any) {
 }
 
 // Update a link
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: any) {
   try {
     // Verify auth token
     const authHeader = request.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-
-    // Connect to database
     await dbConnect();
 
-    // Update the link
-    const result = await Link.findByIdAndUpdate(
+    const updatedLink = await Link.findByIdAndUpdate(
       params.id,
       { $set: body },
       { new: true }
-    );
+    ).lean();
 
-    if (!result) {
-      return NextResponse.json({ message: "Link not found" }, { status: 404 });
+    if (!updatedLink) {
+      return NextResponse.json({ error: "Link not found" }, { status: 404 });
     }
 
-    return NextResponse.json(result, { status: 200 });
+    return NextResponse.json(updatedLink);
   } catch (error) {
     console.error("Error updating link:", error);
     return NextResponse.json(
-      { message: "Error updating link" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
